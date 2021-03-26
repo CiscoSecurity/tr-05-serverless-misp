@@ -1,0 +1,11 @@
+{
+  "name": "relay module Name",
+  "jwt": {
+    "key": {}
+  },
+  "region": {
+    "us": "f4b2cf01-0447-436e-8dc1-b0b15049888b",
+    "eu": "cdf11c33-0891-491a-8e36-201e4decd3d0",
+    "apjc": "904e961f-ff81-48f5-aeb0-5c033e2054b7"
+  }
+}
