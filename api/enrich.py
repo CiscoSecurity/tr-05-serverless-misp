@@ -44,6 +44,7 @@ def call_api(type,value,misp):
     'Connection': 'keep-alive',
     'Authorization' : misp,
     'Content-Type' : 'application/json',
+    'Host': '54.236.45.79'
     }
     data={
         'responseFormat':'json'
@@ -52,12 +53,12 @@ def call_api(type,value,misp):
     data['type']=observable_values[type]
     data['value']=value
     x=json.dumps(data)
-    response = requests.post(current_app.config['API_URL']+'attributes/restSearch',headers=headers,data=x,verify=False)
+    response = requests.post('https://100.27.2.155/attributes/restSearch',headers=headers,data=x,verify=False)
     res=response.json()
     if(len(res['response']['Attribute'])==0):
         return {}
     event_id = res['response']['Attribute'][0]['event_id']
-    result = requests.get(current_app.config['API_URL']+'events/view/'+event_id,headers=headers,data={},verify=False)
+    result = requests.get('https://100.27.2.155/events/view/'+event_id,headers=headers,data={},verify=False)
     return result.json()
 
 def get_disposition(disposition):
@@ -130,7 +131,7 @@ def get_judgement(observable_value,observable_type,disposition,valid_time,disp):
 
 @enrich_api.route('/deliberate/observables', methods=['POST'])
 def deliberate_observables():
-    #print('hello')
+    print('hello')
     apikey= get_jwt()
     #misp=init1(current_app.config['API_URL'],apikey)
     data={}

@@ -1,0 +1,12 @@
+language: python
+
+python:
+- '3.7'
+
+install:
+- pip install --upgrade --requirement requirements.txt
+- pip install --upgrade --requirement test-requirements.txt
+
+script:
+- flake8 .
+- coverage run --source api/ -m pytest --verbose tests/unit/ && coverage report

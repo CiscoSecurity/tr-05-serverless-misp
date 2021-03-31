@@ -1,7 +1,7 @@
 {
   "name": "relay module Name",
   "jwt": {
-    "key": {}
+    "key": "SIkW4edEIPBiAyDQQuixDExGcKWOwCz8hojNergQBO796B30fVilrER3aDq3yFeu"
   },
   "region": {
     "us": "f4b2cf01-0447-436e-8dc1-b0b15049888b",

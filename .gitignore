@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# PyCharm
+.idea/
+
+# Python
+__pycache__/
+venv/
+
+# dotenv
+.env
