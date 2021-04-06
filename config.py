@@ -5,11 +5,9 @@ from __version__ import VERSION
 
 class Config:
     VERSION = VERSION
-
-    SECRET_KEY = 'SIkW4edEIPBiAyDQQuixDExGcKWOwCz8hojNergQBO796B30fVilrER3aDq3yFeu'
-
-    API_URL = 'https://100.27.2.155/'
-
+    SECRET_KEY= os.environ.get('SECRET_KEY', None)
+    API_URL= os.environ.get('API_URL', None)
+    
     CCT_OBSERVABLE_TYPES = {
         'url': {'sep': '://'},
         'ip': {},

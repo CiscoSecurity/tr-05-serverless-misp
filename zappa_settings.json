@@ -10,6 +10,6 @@
         "project_name": "tr-misp-relay",
         "role_name": "tr-serverless-relay-ZappaLambdaExecutionRole",
         "runtime": "python3.7",
-        "s3_bucket": "zappa-tr-template-relay"
+        "s3_bucket": "zappa-tr-template-relay-738904269088"
     }
 }
