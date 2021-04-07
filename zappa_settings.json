@@ -6,10 +6,10 @@
         "keep_warm": false,
         "log_level": "INFO",
         "manage_roles": false,
-        "profile_name": "sveerada",
+        "profile_name": "serverless",
         "project_name": "tr-misp-relay",
         "role_name": "tr-serverless-relay-ZappaLambdaExecutionRole",
         "runtime": "python3.7",
-        "s3_bucket": "zappa-tr-template-relay-738904269088"
+        "s3_bucket": "zappa-tr-misp-relay"
     }
 }
