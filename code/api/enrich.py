@@ -1,7 +1,8 @@
-from flask import Blueprint
 from functools import partial
+
 from api.schemas import ObservableSchema
 from api.utils import get_json, get_jwt, jsonify_data
+from flask import Blueprint
 
 enrich_api = Blueprint('enrich', __name__)
 

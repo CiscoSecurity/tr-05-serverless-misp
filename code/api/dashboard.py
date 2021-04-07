@@ -1,6 +1,6 @@
-from flask import Blueprint
-from api.utils import jsonify_data, get_jwt, get_json
 from api.schemas import DashboardTileSchema, DashboardTileDataSchema
+from api.utils import jsonify_data, get_jwt, get_json
+from flask import Blueprint
 
 dashboard_api = Blueprint('dashboard', __name__)
 

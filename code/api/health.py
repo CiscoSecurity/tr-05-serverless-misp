@@ -1,5 +1,5 @@
-from flask import Blueprint
 from api.utils import get_jwt, jsonify_data
+from flask import Blueprint
 
 health_api = Blueprint('health', __name__)
 

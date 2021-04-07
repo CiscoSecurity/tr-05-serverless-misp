@@ -8,7 +8,6 @@ from jwt import (
     DecodeError, PyJWKClientError
 )
 
-
 NO_AUTH_HEADER = 'Authorization header is missing'
 WRONG_AUTH_TYPE = 'Wrong authorization type'
 WRONG_PAYLOAD_STRUCTURE = 'Wrong JWT payload structure'
