@@ -1,7 +1,7 @@
 from pytest import fixture
 from http import HTTPStatus
 
-from .utils import get_headers
+from tests.unit.api.utils import get_headers
 from unittest.mock import patch
 from api.errors import AUTH_ERROR
 from api.utils import (
@@ -11,7 +11,7 @@ from api.utils import (
     KID_NOT_FOUND,
     JWKS_HOST_MISSING
 )
-from ..payloads_for_tests import (
+from tests.unit.payloads_for_tests import (
     EXPECTED_RESPONSE_OF_JWKS_ENDPOINT,
     RESPONSE_OF_JWKS_ENDPOINT_WITH_WRONG_KEY
 )

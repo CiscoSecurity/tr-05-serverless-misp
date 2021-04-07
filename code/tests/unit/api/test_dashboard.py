@@ -1,10 +1,11 @@
-from pytest import fixture
-from http import HTTPStatus
-from .utils import get_headers
-from unittest.mock import patch
 from collections import namedtuple
+from http import HTTPStatus
+from unittest.mock import patch
+
 from api.errors import INVALID_ARGUMENT
-from ..payloads_for_tests import EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
+from pytest import fixture
+from tests.unit.api.utils import get_headers
+from tests.unit.payloads_for_tests import EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
 
 WrongCall = namedtuple('WrongCall', ('endpoint', 'payload', 'message'))
 

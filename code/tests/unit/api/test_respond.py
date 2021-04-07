@@ -3,8 +3,8 @@ from unittest.mock import patch
 
 from pytest import fixture
 
-from .utils import get_headers
-from ..payloads_for_tests import EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
+from tests.unit.api.utils import get_headers
+from tests.unit.payloads_for_tests import EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
 
 
 def routes():
