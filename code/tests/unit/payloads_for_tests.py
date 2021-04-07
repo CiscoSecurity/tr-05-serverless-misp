@@ -1,5 +1,5 @@
 EXPECTED_RESPONSE_OF_JWKS_ENDPOINT = {
-  'keys': [
+    'keys': [
         {
             'kty': 'RSA',
             'n': 'mRkQUiQ271QKj2_LeBefn4PIfHGLWyHGO8x76e'
@@ -12,7 +12,8 @@ EXPECTED_RESPONSE_OF_JWKS_ENDPOINT = {
     ]
 }
 
-RESPONSE_OF_JWKS_ENDPOINT_WITH_WRONG_KEY = {'keys': [
+RESPONSE_OF_JWKS_ENDPOINT_WITH_WRONG_KEY = {
+    'keys': [
         {
             'kty': 'RSA',
             'n': 'jwVpCJSiQNvD9izsvPii12GcvmvXT5C6Jon'
@@ -23,7 +24,7 @@ RESPONSE_OF_JWKS_ENDPOINT_WITH_WRONG_KEY = {'keys': [
             'use': 'sig'
         }
     ]
-    }
+}
 
 PRIVATE_KEY = '''-----BEGIN PRIVATE KEY-----
 MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAmRkQUiQ271QKj2/L
