@@ -6,8 +6,8 @@ echo
 echo " Development Dockerfile build script."
 echo
 
-module_name="Docker relay"
-image_name="tr-05-misp-relay"
+module_name="MISP"
+image_name="tr-05-misp"
 
 CONFIG_FILE=code/container_settings.json
 if [ -f $CONFIG_FILE ]; then
