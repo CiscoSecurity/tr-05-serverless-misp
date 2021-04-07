@@ -1,6 +1,7 @@
 AUTH_ERROR = 'authorization error'
 INVALID_ARGUMENT = 'invalid argument'
 UNKNOWN = 'unknown'
+HEALTH_CHECK_ERROR = 'health check failed'
 
 
 class TRFormattedError(Exception):
@@ -36,6 +37,6 @@ class InvalidArgumentError(TRFormattedError):
 class WatchdogError(TRFormattedError):
     def __init__(self):
         super().__init__(
-            code='health check failed',
+            HEALTH_CHECK_ERROR,
             message='Invalid Health Check'
         )
