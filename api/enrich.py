@@ -259,7 +259,7 @@ def observe_observables():
             valid_time['end_time'] = '2525-01-01T00:00:00.000Z'
         else:
             end_time = start_time + timedelta(weeks=1)
-            valid_time['end_time'] = end_time
+            valid_time['end_time'] = end_time.isoformat() + 'Z'
         tlp = get_tlp(disposition, attribute)
         g.verdicts.append(get_verdict(o_value, o_type, disposition_tuple,
                           valid_time))
