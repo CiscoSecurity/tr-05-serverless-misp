@@ -82,30 +82,27 @@ def get_tlp(disposition, attribute):
 
 def get_disposition(disposition):
     threat_id = disposition['Event']['threat_level_id']
-    print(threat_id)
-    if threat_id == '1':
-        return current_app.config['DISPOSITIONS']['malicious']
-    elif threat_id == '2':
-        return current_app.config['DISPOSITIONS']['suspicious']
-    elif threat_id == '3':
-        print('clean')
-        return current_app.config['DISPOSITIONS']['clean']
+    threats = {
+        '1': current_app.config['DISPOSITIONS']['malicious'],
+        '2': current_app.config['DISPOSITIONS']['suspicious'],
+        '3': current_app.config['DISPOSITIONS']['clean']
+    }
+    if threat_id in threats:
+        return threats[threat_id]
     else:
-        print('unknown')
         return current_app.config['DISPOSITIONS']['unknown']
 
 
 def get_verdict(observable_value, observable_type, disposition, valid_time):
-    if disposition[0] == 1:
-        disposition_name = 'Clean'
-    elif disposition[0] == 2:
-        disposition_name = 'Malicious'
-    elif disposition[0] == 3:
-        disposition_name = 'Suspicious'
-    elif disposition[0] == 4:
-        disposition_name = 'Common'
-    elif disposition[0] == 5:
-        disposition_name = 'Unknown'
+    dis = {
+        1: 'Clean',
+        2: 'Malicious',
+        3: 'Suspicious',
+        4: 'Common',
+        5: 'Unknown'
+    }
+    if disposition[0] in dis:
+        disposition_name = dis[disposition[0]]
     else:
         disposition_name = 'Unknown'
     return {
@@ -118,25 +115,18 @@ def get_verdict(observable_value, observable_type, disposition, valid_time):
 
 
 def get_judgement(observable_value, observable_type, disposition, valid_time,
-                  disp, attribute):
+                  disp, attribute, tlp):
     uuid = 'transient:judgement-' + disp['Event']['uuid']
     sever = 'Unknown'
-    if disposition[0] == 1:
-        disposition_name = 'Clean'
-        sever = 'Low'
-    elif disposition[0] == 2:
-        disposition_name = 'Malicious'
-        sever = 'High'
-    elif disposition[0] == 3:
-        disposition_name = 'Suspicious'
-        sever = 'Medium'
-        print(sever)
-    elif disposition[0] == 4:
-        disposition_name = 'Common'
-        sever = 'Unknown'
-    elif disposition[0] == 5:
-        disposition_name = 'Unknown'
-        sever = 'Unknown'
+    dis = {
+        1: ('Clean', 'Low'),
+        2: ('Malicious', 'High'),
+        3: ('Suspicious', 'Medium'),
+        4: ('Common', 'Unknown'),
+        5: ('Unknown', 'Unknown')
+    }
+    disposition_name = dis[disposition[0]][0]
+    sever = dis[disposition[0]][1]
     res = {
         'type': 'judgement',
         'disposition': disposition[0],
@@ -150,7 +140,6 @@ def get_judgement(observable_value, observable_type, disposition, valid_time,
         'source': 'generic api',
         'id': uuid
     }
-    tlp = get_tlp(disp, attribute)
     if(tlp != 'nil'):
         res['tlp'] = tlp
     return res
@@ -161,7 +150,6 @@ def get_sightings(observable_value, observable_type, disposition, attribute):
     uuid = 'transient:sighting-'+disposition['Event']['uuid']
     timestamp = attribute['response']['Attribute'][0]['timestamp']
     event_id = attribute['response']['Attribute'][0]['event_id']
-    print(event_id)
     x = str(datetime.utcfromtimestamp(int(timestamp)))
     time = x[:10]+'T'+x[11:]+'.000Z'
     return{
@@ -182,7 +170,7 @@ def get_sightings(observable_value, observable_type, disposition, attribute):
 
 
 def get_indicators(observable_value, observable_type, disposition, attribute,
-                   valid_time):
+                   valid_time, tlp):
     uuid = 'transient:indicators-'+disposition['Event']['uuid']
     org_id = disposition['Event']['Orgc']['name']
     info = disposition['Event']['info']
@@ -198,7 +186,6 @@ def get_indicators(observable_value, observable_type, disposition, attribute,
         'source_uri': current_app.config['API_URL']+'events/view/'+event_id,
         'short_description': info
     }
-    tlp = get_tlp(disposition, attribute)
     if(tlp != 'nil'):
         res['tlp'] = tlp
     return res
@@ -270,19 +257,23 @@ def observe_observables():
         if not disposition_tuple:
             continue
         start_time = datetime.utcnow()
-        end_time = start_time + timedelta(weeks=1)
         valid_time = {
             'start_time': start_time.isoformat() + 'Z',
-            'end_time': end_time.isoformat() + 'Z',
         }
+        if o_type == 'sha256':
+            valid_time['end_time'] = '2525-01-01T00:00:00.000Z'
+        else:
+            end_time = start_time + timedelta(weeks=1)
+            valid_time['end_time'] = end_time
+        tlp = get_tlp(disposition, attribute)
         g.verdicts.append(get_verdict(o_value, o_type, disposition_tuple,
                           valid_time))
         g.judgements.append(get_judgement(o_value, o_type, disposition_tuple,
-                            valid_time, disposition, attribute))
+                            valid_time, disposition, attribute, tlp))
         sight = get_sightings(o_value, o_type, disposition, attribute)
         g.sightings.append(sight)
         indicate = get_indicators(o_value, o_type, disposition, attribute,
-                                  valid_time)
+                                  valid_time, tlp)
         g.indicators.append(indicate)
         g.relationships.append(get_relationships(sight['id'], indicate['id'],
                                disposition))
