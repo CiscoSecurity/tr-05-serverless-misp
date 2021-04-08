@@ -1,6 +1,7 @@
 AUTH_ERROR = 'authorization error'
 INVALID_ARGUMENT = 'invalid argument'
 UNKNOWN = 'unknown'
+NOTFOUND = 'not found'
 
 
 class TRFormattedError(Exception):
@@ -30,4 +31,13 @@ class InvalidArgumentError(TRFormattedError):
         super().__init__(
             INVALID_ARGUMENT,
             str(message)
+        )
+
+
+class MispNotFoundError(TRFormattedError):
+    def __init__(self, message):
+
+        super().__init__(
+            code=NOTFOUND,
+            message=message
         )
