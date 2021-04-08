@@ -74,5 +74,6 @@ def jsonify_data(data):
 
 def jsonify_errors(data):
     return jsonify({'errors': [data]})
+
 def format_docs(docs):
-    return {'count': len(docs), 'docs': docs} 
+    return {'count': len(docs), 'docs': docs}

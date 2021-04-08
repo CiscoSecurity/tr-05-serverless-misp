@@ -34,7 +34,7 @@ class InvalidArgumentError(TRFormattedError):
         )
 
 
-class MispNotFoundError(TRFormattedError):
+class EmailRepNotFound(TRFormattedError):
     def __init__(self, message):
 
         super().__init__(
