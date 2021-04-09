@@ -114,16 +114,15 @@ def misp_client():
                     'types': ['md5', 'sha1', 'sha256', 'filename', 'domain'],
                     'categories':
                         [
-                        'Internal reference',
-                        'Targeting data',
-                        'Antivirus detection'
+                            'Internal reference',
+                            'Targeting data',
+                            'Antivirus detection'
                         ],
                     'category_type_mappings': {
                         'Internal reference': ['text'],
                         'Targeting data': ['target-user'],
                         'Antivirus detection': ['link'],
-                        'Other': ['comment', 'text']
-                    }
+                        'Other': ['comment', 'text']}
                 })
     ) as patch_misp:
         yield patch_misp

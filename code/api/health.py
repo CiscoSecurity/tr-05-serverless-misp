@@ -16,6 +16,6 @@ def health():
             ssl=current_app.config['MISP_VERIFYCERT']
         )
     except exceptions.PyMISPError as error:
-        raise CriticalMISPResponseError(error)
+        raise CriticalMISPResponseError(error.message)
 
     return jsonify_data({'status': 'ok'})
