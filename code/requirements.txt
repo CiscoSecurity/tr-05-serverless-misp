@@ -3,6 +3,7 @@ marshmallow==3.11.1
 requests==2.25.1
 cryptography==3.3.2
 pyjwt[crypto]==2.0.1
+pymisp==2.4.141.1
 flake8==3.9.0
 coverage==5.2.1
 pytest==6.2.2
