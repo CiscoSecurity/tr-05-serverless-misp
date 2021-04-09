@@ -39,7 +39,7 @@ def get_auth_token():
         raise AuthorizationError(expected_errors[error.__class__])
 
 
-def get_jwt():
+def get_key():
     """
     Get Authorization token and validate its signature
     against the public key from /.well-known/jwks endpoint.

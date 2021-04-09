@@ -40,3 +40,12 @@ class WatchdogError(TRFormattedError):
             HEALTH_CHECK_ERROR,
             message='Invalid Health Check'
         )
+
+
+class CriticalMISPResponseError(TRFormattedError):
+    def __init__(self, message):
+        super().__init__(
+            UNKNOWN,
+            'Unexpected response from MISP: ' +
+            message
+        )
