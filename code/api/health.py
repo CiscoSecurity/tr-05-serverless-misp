@@ -11,9 +11,9 @@ health_api = Blueprint('health', __name__)
 def health():
     try:
         _ = PyMISP(
-            current_app.config['HOST'],
-            get_key(),
-            current_app.config['MISP_VERIFYCERT']
+            key=get_key(),
+            url=current_app.config['HOST'],
+            ssl=current_app.config['MISP_VERIFYCERT']
         )
     except exceptions.PyMISPError as error:
         raise CriticalMISPResponseError(error)
