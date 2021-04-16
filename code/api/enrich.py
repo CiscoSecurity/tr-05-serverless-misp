@@ -35,6 +35,10 @@ def deliberate_observables():
 
         events = misp.search(value=observable['value'], metadata=False)
         events.sort(key=lambda elem: elem['Event']['threat_level_id'])
+        # We sort Events in order to create a single Verdict for a set
+        # of Judgements (Events) based on the fact that in CTIM Clean
+        # disposition has priority over all others,
+        # then Malicious disposition, and so on down to Unknown.
 
         if events:
             g.verdicts.append(mapping.extract_verdict(events[0]['Event']))
@@ -58,6 +62,7 @@ def observe_observables():
 
     g.verdicts = []
     g.judgements = []
+
     for observable in observables:
         mapping = Mapping(observable)
 
