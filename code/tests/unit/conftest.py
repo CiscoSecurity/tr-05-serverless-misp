@@ -123,7 +123,18 @@ def misp_client():
                         'Targeting data': ['target-user'],
                         'Antivirus detection': ['link'],
                         'Other': ['comment', 'text']}
-                })
+                }),
+            search=MagicMock(
+                return_value=[
+                    {"Event": {
+                        "id": "1",
+                        "date": "2014-10-02",
+                        "threat_level_id": "1",
+                        "info": "Test Event With High Threat Level",
+                        "uuid": "542e4c9c-cadc-4f8f-bb11-6d13950d210b"
+                    }}
+                ]
+            )
     ) as patch_misp:
         yield patch_misp
 
@@ -151,3 +162,90 @@ def misp_internal_expected_payload(route):
         ]
     }
     return payload
+
+
+@fixture(scope='module')
+def success_observe_body():
+    return {
+        'data': {
+            'verdicts': {
+                'count': 1,
+                'docs': [
+                    {
+                        'disposition': 2,
+                        'disposition_name': 'Malicious',
+                        'observable': {
+                            'type': 'ip',
+                            'value': '1.1.1.1'
+                        },
+                        'type': 'verdict'
+                    }
+                ]
+            },
+            'judgements': {
+                'count': 1,
+                'docs': [
+                    {
+                        'confidence': 'Medium',
+                        'severity': 'Medium',
+                        'disposition': 2,
+                        'disposition_name': 'Malicious',
+                        'observable': {
+                            'type': 'ip',
+                            'value': '1.1.1.1'
+                        },
+                        'priority': 85,
+                        'schema_version': '1.1.5',
+                        'source': 'MISP',
+                        'type': 'judgement',
+                        "source_uri": (
+                            "https://1.2.3.4/events/view/"
+                            "542e4c9c-cadc-4f8f-bb11-6d13950d210b"
+                        ),
+                    }
+                ]
+            }
+        }
+    }
+
+
+@fixture(scope='module')
+def success_deliberate_body():
+    return {
+        'data': {
+            'verdicts': {
+                'count': 1,
+                'docs': [
+                    {'disposition': 2,
+                     'disposition_name': 'Malicious',
+                     'observable': {
+                         'type': 'ip',
+                         'value': '1.1.1.1'
+                     },
+                     'type': 'verdict'
+                     }
+                ]
+            }
+        }
+    }
+
+
+@fixture(scope='module')
+def success_enrich_expected_payload(
+        route, success_deliberate_body,
+        success_observe_body
+):
+    payload_to_route_match = {
+        '/deliberate/observables': success_deliberate_body,
+        '/refer/observables': {'data': []},
+        '/observe/observables': success_observe_body
+    }
+    return payload_to_route_match[route]
+
+
+@fixture(scope='module')
+def unsupported_type_expected_body(route):
+    if route != '/refer/observables':
+        return {'data': {}}
+
+    return {'data': []}

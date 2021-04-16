@@ -1,12 +1,18 @@
 from urllib.error import URLError
+from uuid import uuid4
 
 import jwt
-from api.errors import AuthorizationError, InvalidArgumentError
-from flask import request, jsonify, current_app
+from api.errors import (
+    AuthorizationError, InvalidArgumentError,
+    CriticalMISPResponseError
+)
+from flask import request, jsonify, current_app, g
 from jwt import (
     PyJWKClient, InvalidSignatureError, InvalidAudienceError,
     DecodeError, PyJWKClientError
 )
+from pymisp import PyMISP, exceptions
+
 
 NO_AUTH_HEADER = 'Authorization header is missing'
 WRONG_AUTH_TYPE = 'Wrong authorization type'
@@ -21,6 +27,15 @@ JWKS_HOST_MISSING = ('jwks_host is missing in JWT payload. Make sure '
                      'custom_jwks_host field is present in module_type')
 WRONG_JWKS_HOST = ('Wrong jwks_host in JWT payload. Make sure domain follows '
                    'the visibility.<region>.cisco.com structure')
+
+
+def set_ctr_entities_limit(payload):
+    try:
+        ctr_entities_limit = int(payload['CTR_ENTITIES_LIMIT'])
+        assert ctr_entities_limit > 0
+    except (KeyError, ValueError, AssertionError):
+        ctr_entities_limit = current_app.config['CTR_DEFAULT_ENTITIES_LIMIT']
+    current_app.config['CTR_ENTITIES_LIMIT'] = ctr_entities_limit
 
 
 def get_auth_token():
@@ -70,6 +85,7 @@ def get_key():
             algorithms=['RS256'], audience=[aud.rstrip('/')]
         )
         current_app.config['HOST'] = payload['HOST']
+        set_ctr_entities_limit(payload)
 
         return payload['AuthKey']
     except tuple(expected_errors) as error:
@@ -98,3 +114,52 @@ def jsonify_data(data):
 
 def jsonify_errors(data):
     return jsonify({'errors': [data]})
+
+
+def format_docs(docs):
+    return {'count': len(docs), 'docs': docs}
+
+
+def jsonify_result():
+    result = {'data': {}}
+
+    if g.get('verdicts'):
+        result['data']['verdicts'] = format_docs(g.verdicts)
+    if g.get('judgements'):
+        result['data']['judgements'] = format_docs(g.judgements)
+
+    if g.get('errors'):
+        result['errors'] = g.errors
+        if not result['data']:
+            del result['data']
+
+    return jsonify(result)
+
+
+def transient_id(entity_type):
+    return f'transient:{entity_type}-{uuid4()}'
+
+
+def remove_duplicates(observables):
+    return [dict(t) for t in {tuple(d.items()) for d in observables}]
+
+
+def filter_observables(observables):
+    supported_types = current_app.config['SUPPORTED_TYPES']
+    observables = remove_duplicates(observables)
+    return list(
+        filter(lambda obs: obs['type'] in supported_types, observables)
+    )
+
+
+def create_misp_instance():
+    try:
+        return PyMISP(
+            key=get_key(),
+            url=current_app.config['HOST'],
+            ssl=current_app.config['MISP_VERIFYCERT'],
+            tool=current_app.config['USER_AGENT'],
+            timeout=current_app.config['MISP_TIMEOUT_SEC']
+        )
+    except exceptions.PyMISPError as error:
+        raise CriticalMISPResponseError(error.message)
