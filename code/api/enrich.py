@@ -30,11 +30,11 @@ def deliberate_observables():
     observables = get_observables()
 
     g.verdicts = []
-    for ob in observables:
-        mapping = Mapping(ob)
+    for observable in observables:
+        mapping = Mapping(observable)
 
-        events = misp.search(value=ob['value'], metadata=False)
-        events.sort(key=lambda j: j['Event']['threat_level_id'])
+        events = misp.search(value=observable['value'], metadata=False)
+        events.sort(key=lambda elem: elem['Event']['threat_level_id'])
 
         if events:
             g.verdicts.append(mapping.extract_verdict(events[0]['Event']))
@@ -62,18 +62,18 @@ def observe_observables():
         mapping = Mapping(observable)
 
         events = misp.search(value=observable['value'], metadata=False)
-        events.sort(key=lambda j: j['Event']['threat_level_id'])
+        events.sort(key=lambda elem: elem['Event']['threat_level_id'])
+        events = events[:current_app.config['CTR_ENTITIES_LIMIT']]
 
         judgements_for_observable = []
         for event in events:
-            judgements_for_observable.append(mapping.extract_judgement(
-                event['Event']))
+            judgements_for_observable.append(
+                mapping.extract_judgement(event['Event'])
+            )
 
         if judgements_for_observable:
             g.judgements.extend(judgements_for_observable)
-            verdict = mapping.extract_verdict(
-                events[0]['Event']
-            )
+            verdict = mapping.extract_verdict(events[0]['Event'])
             verdict['judgement_id'] = judgements_for_observable[0]['id']
             g.verdicts.append(verdict)
 

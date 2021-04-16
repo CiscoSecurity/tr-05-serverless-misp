@@ -24,6 +24,15 @@ WRONG_JWKS_HOST = ('Wrong jwks_host in JWT payload. Make sure domain follows '
                    'the visibility.<region>.cisco.com structure')
 
 
+def set_ctr_entities_limit(payload):
+    try:
+        ctr_entities_limit = int(payload['CTR_ENTITIES_LIMIT'])
+        assert ctr_entities_limit > 0
+    except (KeyError, ValueError, AssertionError):
+        ctr_entities_limit = current_app.config['CTR_DEFAULT_ENTITIES_LIMIT']
+    current_app.config['CTR_ENTITIES_LIMIT'] = ctr_entities_limit
+
+
 def get_auth_token():
     """
     Parse and validate incoming request Authorization header.
@@ -71,6 +80,7 @@ def get_key():
             algorithms=['RS256'], audience=[aud.rstrip('/')]
         )
         current_app.config['HOST'] = payload['HOST']
+        set_ctr_entities_limit(payload)
 
         return payload['AuthKey']
     except tuple(expected_errors) as error:

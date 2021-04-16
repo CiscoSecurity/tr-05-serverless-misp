@@ -4,7 +4,7 @@ from api.utils import transient_id
 from datetime import datetime, timedelta
 
 CTIM_DEFAULTS = {
-    'schema_version': '1.1.5',
+    'schema_version': '1.1.5'
 }
 
 SOURCE = 'MISP'
