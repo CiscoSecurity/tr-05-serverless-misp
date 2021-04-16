@@ -61,3 +61,20 @@ def test_enrich_call_success(mock_request, misp_client,
             assert doc.pop('valid_time')
             assert doc.pop('id')
     assert response == success_enrich_expected_payload
+
+
+@fixture(scope='module')
+def unsupported_type_json():
+    return [{'type': 'unsupported_type', 'value': '1.1.1.1'}]
+
+
+@patch('jwt.PyJWKClient.fetch_data')
+def test_enrich_call_with_unsupported_type_json(
+        mock_request, misp_client, unsupported_type_expected_body,
+        route, client, valid_jwt, unsupported_type_json
+):
+    mock_request.return_value = EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
+    response = client.post(route, headers=get_headers(valid_jwt()),
+                           json=unsupported_type_json)
+    assert response.status_code == HTTPStatus.OK
+    assert response.get_json() == unsupported_type_expected_body

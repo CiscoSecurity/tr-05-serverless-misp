@@ -131,5 +131,17 @@ def jsonify_result():
     return jsonify(result)
 
 
-def transient_id(entity_type: str) -> str:
+def transient_id(entity_type):
     return f'transient:{entity_type}-{uuid4()}'
+
+
+def remove_duplicates(observables):
+    return [dict(t) for t in {tuple(d.items()) for d in observables}]
+
+
+def filter_observables(observables):
+    supported_types = current_app.config['SUPPORTED_TYPES']
+    observables = remove_duplicates(observables)
+    return list(
+        filter(lambda obs: obs['type'] in supported_types, observables)
+    )

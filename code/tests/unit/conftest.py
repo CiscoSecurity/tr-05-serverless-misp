@@ -171,36 +171,38 @@ def success_observe_body():
             'verdicts': {
                 'count': 1,
                 'docs': [
-                    {'disposition': 2,
-                     'disposition_name': 'Malicious',
-                     'observable': {
-                         'type': 'ip',
-                         'value': '1.1.1.1'
-                     },
-                     'type': 'verdict'
-                     }
+                    {
+                        'disposition': 2,
+                        'disposition_name': 'Malicious',
+                        'observable': {
+                            'type': 'ip',
+                            'value': '1.1.1.1'
+                        },
+                        'type': 'verdict'
+                    }
                 ]
             },
             'judgements': {
                 'count': 1,
                 'docs': [
-                    {'confidence': 'Medium',
-                     'severity': 'Medium',
-                     'disposition': 2,
-                     'disposition_name': 'Malicious',
-                     'observable': {
-                         'type': 'ip',
-                         'value': '1.1.1.1'
-                     },
-                     'priority': 85,
-                     'schema_version': '1.1.5',
-                     'source': 'MISP',
-                     'type': 'judgement',
-                     "source_uri": (
-                         "https://1.2.3.4/events/view/"
-                         "542e4c9c-cadc-4f8f-bb11-6d13950d210b"
-                     ),
-                     }
+                    {
+                        'confidence': 'Medium',
+                        'severity': 'Medium',
+                        'disposition': 2,
+                        'disposition_name': 'Malicious',
+                        'observable': {
+                            'type': 'ip',
+                            'value': '1.1.1.1'
+                        },
+                        'priority': 85,
+                        'schema_version': '1.1.5',
+                        'source': 'MISP',
+                        'type': 'judgement',
+                        "source_uri": (
+                            "https://1.2.3.4/events/view/"
+                            "542e4c9c-cadc-4f8f-bb11-6d13950d210b"
+                        ),
+                    }
                 ]
             }
         }
@@ -239,3 +241,11 @@ def success_enrich_expected_payload(
         '/observe/observables': success_observe_body
     }
     return payload_to_route_match[route]
+
+
+@fixture(scope='module')
+def unsupported_type_expected_body(route):
+    if route != '/refer/observables':
+        return {'data': {}}
+
+    return {'data': []}

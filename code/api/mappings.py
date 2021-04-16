@@ -37,15 +37,15 @@ THREAT_LEVEL_MAPPING = {
 ENTITY_RELEVANCE_PERIOD = timedelta(weeks=1)
 
 
-def time_format(time):
-    return f'{time.isoformat(timespec="seconds")}Z'
-
-
 class Mapping:
 
     def __init__(self, observable):
         self.observable = observable
         self.host = current_app.config['HOST']
+
+    @staticmethod
+    def time_format(time):
+        return f'{time.isoformat(timespec="seconds")}Z'
 
     def _valid_time(self):
         start_time = datetime.now()
@@ -55,8 +55,8 @@ class Mapping:
             end_time = start_time + ENTITY_RELEVANCE_PERIOD
 
         return {
-            'start_time': time_format(start_time),
-            'end_time': time_format(end_time)
+            'start_time': self.time_format(start_time),
+            'end_time': self.time_format(end_time)
         }
 
     def _source_uri(self, event):

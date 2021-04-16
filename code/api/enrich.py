@@ -8,7 +8,8 @@ from pymisp import PyMISP, exceptions
 from api.errors import CriticalMISPResponseError
 from api.mappings import Mapping
 
-from api.utils import jsonify_result
+from api.utils import jsonify_result, filter_observables
+
 
 enrich_api = Blueprint('enrich', __name__)
 
@@ -27,18 +28,19 @@ def deliberate_observables():
     except exceptions.PyMISPError as error:
         raise CriticalMISPResponseError(error.message)
 
-    observables = get_observables()
+    observables = filter_observables(get_observables())
 
     g.verdicts = []
+
     for observable in observables:
         mapping = Mapping(observable)
 
         events = misp.search(value=observable['value'], metadata=False)
         events.sort(key=lambda elem: elem['Event']['threat_level_id'])
-        # We sort Events in order to create a single Verdict for a set
-        # of Judgements (Events) based on the fact that in CTIM Clean
-        # disposition has priority over all others,
-        # then Malicious disposition, and so on down to Unknown.
+        # We sort events in order to create a single Verdict for a set
+        # of events based on the fact that High threat level has
+        # priority over all others, then Medium threat level,
+        # and so on down to Undefined.
 
         if events:
             g.verdicts.append(mapping.extract_verdict(events[0]['Event']))
@@ -58,7 +60,7 @@ def observe_observables():
     except exceptions.PyMISPError as error:
         raise CriticalMISPResponseError(error.message)
 
-    observables = get_observables()
+    observables = filter_observables(get_observables())
 
     g.verdicts = []
     g.judgements = []
@@ -71,6 +73,7 @@ def observe_observables():
         events = events[:current_app.config['CTR_ENTITIES_LIMIT']]
 
         judgements_for_observable = []
+
         for event in events:
             judgements_for_observable.append(
                 mapping.extract_judgement(event['Event'])
