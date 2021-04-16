@@ -6,7 +6,7 @@ from flask import Blueprint, current_app, g
 from pymisp import PyMISP, exceptions
 
 from api.errors import CriticalMISPResponseError
-from api.mappings import Mapping
+from api.mapping import Mapping
 
 from api.utils import jsonify_result, filter_observables
 
