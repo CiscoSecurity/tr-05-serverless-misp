@@ -1,12 +1,12 @@
 from functools import partial
 
-from api.errors import CriticalMISPResponseError
 from api.mapping import Mapping
 from api.schemas import ObservableSchema
-from api.utils import get_json, get_key, jsonify_data
-from api.utils import jsonify_result, filter_observables
+from api.utils import (
+    get_json, get_key, jsonify_data,
+    jsonify_result, filter_observables, create_misp_instance
+)
 from flask import Blueprint, current_app, g
-from pymisp import PyMISP, exceptions
 
 enrich_api = Blueprint('enrich', __name__)
 
@@ -15,17 +15,7 @@ get_observables = partial(get_json, schema=ObservableSchema(many=True))
 
 @enrich_api.route('/deliberate/observables', methods=['POST'])
 def deliberate_observables():
-    try:
-        misp = PyMISP(
-            key=get_key(),
-            url=current_app.config['HOST'],
-            ssl=current_app.config['MISP_VERIFYCERT'],
-            tool=current_app.config['USER_AGENT'],
-            timeout=current_app.config['MISP_TIMEOUT_SEC']
-        )
-    except exceptions.PyMISPError as error:
-        raise CriticalMISPResponseError(error.message)
-
+    misp = create_misp_instance()
     observables = filter_observables(get_observables())
 
     g.verdicts = []
@@ -48,17 +38,7 @@ def deliberate_observables():
 
 @enrich_api.route('/observe/observables', methods=['POST'])
 def observe_observables():
-    try:
-        misp = PyMISP(
-            key=get_key(),
-            url=current_app.config['HOST'],
-            ssl=current_app.config['MISP_VERIFYCERT'],
-            tool=current_app.config['USER_AGENT'],
-            timeout=current_app.config['MISP_TIMEOUT_SEC']
-        )
-    except exceptions.PyMISPError as error:
-        raise CriticalMISPResponseError(error.message)
-
+    misp = create_misp_instance()
     observables = filter_observables(get_observables())
 
     g.verdicts = []

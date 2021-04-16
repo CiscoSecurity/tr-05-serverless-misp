@@ -2,12 +2,17 @@ from urllib.error import URLError
 from uuid import uuid4
 
 import jwt
-from api.errors import AuthorizationError, InvalidArgumentError
+from api.errors import (
+    AuthorizationError, InvalidArgumentError,
+    CriticalMISPResponseError
+)
 from flask import request, jsonify, current_app, g
 from jwt import (
     PyJWKClient, InvalidSignatureError, InvalidAudienceError,
     DecodeError, PyJWKClientError
 )
+from pymisp import PyMISP, exceptions
+
 
 NO_AUTH_HEADER = 'Authorization header is missing'
 WRONG_AUTH_TYPE = 'Wrong authorization type'
@@ -145,3 +150,16 @@ def filter_observables(observables):
     return list(
         filter(lambda obs: obs['type'] in supported_types, observables)
     )
+
+
+def create_misp_instance():
+    try:
+        return PyMISP(
+            key=get_key(),
+            url=current_app.config['HOST'],
+            ssl=current_app.config['MISP_VERIFYCERT'],
+            tool=current_app.config['USER_AGENT'],
+            timeout=current_app.config['MISP_TIMEOUT_SEC']
+        )
+    except exceptions.PyMISPError as error:
+        raise CriticalMISPResponseError(error.message)
