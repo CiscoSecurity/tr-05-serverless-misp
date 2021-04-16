@@ -13,7 +13,9 @@ def health():
         _ = PyMISP(
             key=get_key(),
             url=current_app.config['HOST'],
-            ssl=current_app.config['MISP_VERIFYCERT']
+            ssl=current_app.config['MISP_VERIFYCERT'],
+            tool=current_app.config['USER_AGENT'],
+            timeout=current_app.config['MISP_TIMEOUT_SEC']
         )
     except exceptions.PyMISPError as error:
         raise CriticalMISPResponseError(error.message)

@@ -6,6 +6,7 @@ class Config:
     VERSION = settings['VERSION']
 
     MISP_VERIFYCERT = False
+    MISP_TIMEOUT_SEC = 25
 
     SOURCE_URI = '{host}/events/view/{uuid}'
 

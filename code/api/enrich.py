@@ -23,7 +23,8 @@ def deliberate_observables():
             key=get_key(),
             url=current_app.config['HOST'],
             ssl=current_app.config['MISP_VERIFYCERT'],
-            tool=current_app.config['USER_AGENT']
+            tool=current_app.config['USER_AGENT'],
+            timeout=current_app.config['MISP_TIMEOUT_SEC']
         )
     except exceptions.PyMISPError as error:
         raise CriticalMISPResponseError(error.message)
@@ -55,7 +56,8 @@ def observe_observables():
             key=get_key(),
             url=current_app.config['HOST'],
             ssl=current_app.config['MISP_VERIFYCERT'],
-            tool=current_app.config['USER_AGENT']
+            tool=current_app.config['USER_AGENT'],
+            timeout=current_app.config['MISP_TIMEOUT_SEC']
         )
     except exceptions.PyMISPError as error:
         raise CriticalMISPResponseError(error.message)
