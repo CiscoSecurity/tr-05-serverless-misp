@@ -1,15 +1,12 @@
 from functools import partial
 
-from api.schemas import ObservableSchema
-from api.utils import get_json, get_key, jsonify_data
-from flask import Blueprint, current_app, g
-from pymisp import PyMISP, exceptions
-
 from api.errors import CriticalMISPResponseError
 from api.mapping import Mapping
-
+from api.schemas import ObservableSchema
+from api.utils import get_json, get_key, jsonify_data
 from api.utils import jsonify_result, filter_observables
-
+from flask import Blueprint, current_app, g
+from pymisp import PyMISP, exceptions
 
 enrich_api = Blueprint('enrich', __name__)
 
