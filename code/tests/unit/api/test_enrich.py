@@ -23,7 +23,7 @@ def invalid_json_value():
 
 @patch('jwt.PyJWKClient.fetch_data')
 def test_enrich_call_with_valid_jwt_but_invalid_json_value(
-        mock_request,
+        mock_request,  misp_client,
         route, client, valid_jwt, invalid_json_value,
         invalid_json_expected_payload
 ):
@@ -39,13 +39,25 @@ def test_enrich_call_with_valid_jwt_but_invalid_json_value(
 
 @fixture(scope='module')
 def valid_json():
-    return [{'type': 'domain', 'value': 'cisco.com'}]
+    return [{'type': 'ip', 'value': '1.1.1.1'}]
 
 
 @patch('jwt.PyJWKClient.fetch_data')
-def test_enrich_call_success(mock_request,
+def test_enrich_call_success(mock_request, misp_client,
+                             success_enrich_expected_payload,
                              route, client, valid_jwt, valid_json):
     mock_request.return_value = EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
     response = client.post(route, headers=get_headers(valid_jwt()),
                            json=valid_json)
     assert response.status_code == HTTPStatus.OK
+    response = response.get_json()
+    if response.get('data') and response['data'].get('verdicts'):
+        for doc in response['data']['verdicts']['docs']:
+            assert doc.pop('valid_time')
+            if route == '/observe/observables':
+                assert doc.pop('judgement_id')
+    if response.get('data') and response['data'].get('judgements'):
+        for doc in response['data']['judgements']['docs']:
+            assert doc.pop('valid_time')
+            assert doc.pop('id')
+    assert response == success_enrich_expected_payload

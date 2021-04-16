@@ -1,8 +1,9 @@
 from urllib.error import URLError
+from uuid import uuid4
 
 import jwt
 from api.errors import AuthorizationError, InvalidArgumentError
-from flask import request, jsonify, current_app
+from flask import request, jsonify, current_app, g
 from jwt import (
     PyJWKClient, InvalidSignatureError, InvalidAudienceError,
     DecodeError, PyJWKClientError
@@ -98,3 +99,27 @@ def jsonify_data(data):
 
 def jsonify_errors(data):
     return jsonify({'errors': [data]})
+
+
+def format_docs(docs):
+    return {'count': len(docs), 'docs': docs}
+
+
+def jsonify_result():
+    result = {'data': {}}
+
+    if g.get('verdicts'):
+        result['data']['verdicts'] = format_docs(g.verdicts)
+    if g.get('judgements'):
+        result['data']['judgements'] = format_docs(g.judgements)
+
+    if g.get('errors'):
+        result['errors'] = g.errors
+        if not result['data']:
+            del result['data']
+
+    return jsonify(result)
+
+
+def transient_id(entity_type: str) -> str:
+    return f'transient:{entity_type}-{uuid4()}'
