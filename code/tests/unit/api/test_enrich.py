@@ -60,6 +60,9 @@ def test_enrich_call_success(mock_request, misp_client,
         for doc in response['data']['judgements']['docs']:
             assert doc.pop('valid_time')
             assert doc.pop('id')
+    if response.get('data') and response['data'].get('sightings'):
+        for doc in response['data']['sightings']['docs']:
+            assert doc.pop('id')
     assert response == success_enrich_expected_payload
 
 

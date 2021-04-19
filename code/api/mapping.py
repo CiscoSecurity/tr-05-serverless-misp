@@ -11,6 +11,7 @@ SOURCE = 'MISP'
 
 VERDICT = 'verdict'
 JUDGEMENT = 'judgement'
+SIGHTING = 'sighting'
 
 VERDICT_DEFAULTS = {
     'type': VERDICT
@@ -23,6 +24,14 @@ JUDGEMENT_DEFAULTS = {
     'priority': 85,
     'confidence': 'Medium',
     'severity': 'Medium'
+}
+
+SIGHTING_DEFAULTS = {
+    **CTIM_DEFAULTS,
+    'type': SIGHTING,
+    'count': 1,
+    'confidence': 'High',
+    'source': SOURCE
 }
 
 FILE_HASH_TYPES = ('md5', 'sha1', 'sha256')
@@ -85,4 +94,29 @@ class Mapping:
             'id': transient_id(JUDGEMENT),
             'source_uri': self._source_uri(event),
             **JUDGEMENT_DEFAULTS
+        }
+
+    def _description(self, event):
+        for attribute in event['Attribute']:
+            if attribute['value'] == self.observable['value']:
+                return f"Category: {attribute['category']}"
+
+    def _observed_time(self, event):
+        date_str = datetime.strptime(event['date'], '%Y-%m-%d')
+        date = self.time_format(date_str)
+        return {'start_time': date, 'end_time': date}
+
+    def _timestamp(self, event):
+        unix_timestamp = int(event['timestamp'])
+        return self.time_format(datetime.utcfromtimestamp(unix_timestamp))
+
+    def extract_sighting(self, event):
+        return {
+            'observables': [self.observable],
+            'description': self._description(event),
+            'observed_time': self._observed_time(event),
+            'id': transient_id(SIGHTING),
+            'source_uri': self._source_uri(event),
+            'timestamp': self._timestamp(event),
+            **SIGHTING_DEFAULTS
         }
