@@ -12,6 +12,7 @@ SOURCE = 'MISP'
 VERDICT = 'verdict'
 JUDGEMENT = 'judgement'
 SIGHTING = 'sighting'
+INDICATOR = 'indicator'
 
 VERDICT_DEFAULTS = {
     'type': VERDICT
@@ -30,6 +31,13 @@ SIGHTING_DEFAULTS = {
     **CTIM_DEFAULTS,
     'type': SIGHTING,
     'count': 1,
+    'confidence': 'High',
+    'source': SOURCE
+}
+
+INDICATOR_DEFAULTS = {
+    **CTIM_DEFAULTS,
+    'type': INDICATOR,
     'confidence': 'High',
     'source': SOURCE
 }
@@ -119,4 +127,17 @@ class Mapping:
             'source_uri': self._source_uri(event),
             'timestamp': self._timestamp(event),
             **SIGHTING_DEFAULTS
+        }
+
+    def extract_indicator(self, event):
+        return {
+            'short_description': self._description(event),
+            'valid_time': self._observed_time(event),
+            'id': transient_id(INDICATOR, event['uuid']),
+            'source_uri': self._source_uri(event),
+            'timestamp': self._timestamp(event),
+            'tags': [tag['name'] for tag in event.get('Tag', [])],
+            'producer': event['Orgc']['name'],
+            'title': event['info'],
+            **INDICATOR_DEFAULTS
         }

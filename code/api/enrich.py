@@ -44,6 +44,7 @@ def observe_observables():
     g.verdicts = []
     g.judgements = []
     g.sightings = []
+    g.indicators = []
 
     for observable in observables:
         mapping = Mapping(observable)
@@ -59,6 +60,7 @@ def observe_observables():
                 mapping.extract_judgement(event['Event'])
             )
             g.sightings.append(mapping.extract_sighting(event['Event']))
+            g.indicators.append(mapping.extract_indicator(event['Event']))
 
         if judgements_for_observable:
             g.judgements.extend(judgements_for_observable)
