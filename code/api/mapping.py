@@ -106,7 +106,7 @@ class Mapping:
 
     def _description(self, event):
         for attribute in event['Attribute']:
-            if attribute['value'] == self.observable['value']:
+            if self.observable['value'] in attribute['value']:
                 return f"Category: {attribute['category']}"
 
     def _observed_time(self, event):
