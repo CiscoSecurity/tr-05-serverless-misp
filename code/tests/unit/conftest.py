@@ -131,7 +131,13 @@ def misp_client():
                         "date": "2014-10-02",
                         "threat_level_id": "1",
                         "info": "Test Event With High Threat Level",
-                        "uuid": "542e4c9c-cadc-4f8f-bb11-6d13950d210b"
+                        "uuid": "542e4c9c-cadc-4f8f-bb11-6d13950d210b",
+                        "timestamp": "1615504132",
+                        "Attribute": [{
+                            'id': '132789',
+                            'category': 'Payload delivery',
+                            'value': '1.1.1.1'
+                        }]
                     }}
                 ]
             )
@@ -198,10 +204,38 @@ def success_observe_body():
                         'schema_version': '1.1.5',
                         'source': 'MISP',
                         'type': 'judgement',
-                        "source_uri": (
-                            "https://1.2.3.4/events/view/"
-                            "542e4c9c-cadc-4f8f-bb11-6d13950d210b"
+                        'source_uri': (
+                            'https://1.2.3.4/events/view/'
+                            '542e4c9c-cadc-4f8f-bb11-6d13950d210b'
                         ),
+                    }
+                ]
+            },
+            'sightings': {
+                'count': 1,
+                'docs': [
+                    {
+                        'confidence': 'High',
+                        'count': 1,
+                        'description': 'Category: Payload delivery',
+                        'observables': [
+                            {
+                                'type': 'ip',
+                                'value': '1.1.1.1'
+                            }
+                        ],
+                        'observed_time': {
+                            'end_time': '2014-10-02T00:00:00Z',
+                            'start_time': '2014-10-02T00:00:00Z'
+                        },
+                        'schema_version': '1.1.5',
+                        'source': 'MISP',
+                        'source_uri': (
+                            'https://1.2.3.4/events/view/'
+                            '542e4c9c-cadc-4f8f-bb11-6d13950d210b'
+                        ),
+                        'timestamp': '2021-03-11T23:08:52Z',
+                        'type': 'sighting'
                     }
                 ]
             }
