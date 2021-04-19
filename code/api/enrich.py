@@ -49,9 +49,11 @@ def observe_observables():
     for observable in observables:
         mapping = Mapping(observable)
 
-        events = misp.search(value=observable['value'], metadata=False)
+        events = misp.search(
+            value=observable['value'], metadata=False,
+            limit=current_app.config['CTR_ENTITIES_LIMIT']
+        )
         events.sort(key=lambda elem: elem['Event']['threat_level_id'])
-        events = events[:current_app.config['CTR_ENTITIES_LIMIT']]
 
         judgements_for_observable = []
 
