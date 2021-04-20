@@ -51,18 +51,21 @@ def test_enrich_call_success(mock_request, misp_client,
                            json=valid_json)
     assert response.status_code == HTTPStatus.OK
     response = response.get_json()
-    if response.get('data') and response['data'].get('verdicts'):
+    if route != '/refer/observables':
+        if route == '/observe/observables':
+            for doc in response['data']['verdicts']['docs']:
+                assert doc.pop('judgement_id')
+            for doc in response['data']['judgements']['docs']:
+                assert doc.pop('valid_time')
+                assert doc.pop('id')
+            for doc in response['data']['sightings']['docs']:
+                assert doc.pop('id')
+            for doc in response['data']['relationships']['docs']:
+                assert doc.pop('id')
+                assert doc.pop('source_ref')
+
         for doc in response['data']['verdicts']['docs']:
             assert doc.pop('valid_time')
-            if route == '/observe/observables':
-                assert doc.pop('judgement_id')
-    if response.get('data') and response['data'].get('judgements'):
-        for doc in response['data']['judgements']['docs']:
-            assert doc.pop('valid_time')
-            assert doc.pop('id')
-    if response.get('data') and response['data'].get('sightings'):
-        for doc in response['data']['sightings']['docs']:
-            assert doc.pop('id')
     assert response == success_enrich_expected_payload
 
 

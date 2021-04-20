@@ -268,6 +268,25 @@ def success_observe_body():
                         'type': 'indicator'
                     }
                 ]
+            },
+            'relationships': {
+                'count': 2,
+                'docs': [
+                    {
+                        'relationship_type': 'member-of',
+                        'schema_version': '1.1.5',
+                        'target_ref': 'transient:indicator-'
+                                      '542e4c9c-cadc-4f8f-bb11-6d13950d210b',
+                        'type': 'relationship'
+                    },
+                    {
+                        'relationship_type': 'element-of',
+                        'schema_version': '1.1.5',
+                        'target_ref': 'transient:indicator-'
+                                      '542e4c9c-cadc-4f8f-bb11-6d13950d210b',
+                        'type': 'relationship'
+                    }
+                ]
             }
         }
     }

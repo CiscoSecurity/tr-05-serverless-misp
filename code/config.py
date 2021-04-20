@@ -16,3 +16,7 @@ class Config:
     CTR_DEFAULT_ENTITIES_LIMIT = 100
 
     SUPPORTED_TYPES = ('ip', 'domain', 'url', 'sha1', 'sha256', 'md5')
+
+    MEMBER_OF_RELATION = 'member-of'
+
+    ELEMENT_OF_RELATION = 'element-of'

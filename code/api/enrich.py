@@ -45,6 +45,7 @@ def observe_observables():
     g.judgements = []
     g.sightings = []
     g.indicators = []
+    g.relationships = []
 
     for observable in observables:
         mapping = Mapping(observable)
@@ -58,11 +59,27 @@ def observe_observables():
         judgements_for_observable = []
 
         for event in events:
-            judgements_for_observable.append(
-                mapping.extract_judgement(event['Event'])
+            judgement = mapping.extract_judgement(event['Event'])
+            judgements_for_observable.append(judgement)
+
+            sighting = mapping.extract_sighting(event['Event'])
+            g.sightings.append(sighting)
+
+            indicator = mapping.extract_indicator(event['Event'])
+            g.indicators.append(indicator)
+
+            g.relationships.append(
+                mapping.extract_relationship(
+                    sighting['id'], indicator['id'],
+                    current_app.config['MEMBER_OF_RELATION']
+                )
             )
-            g.sightings.append(mapping.extract_sighting(event['Event']))
-            g.indicators.append(mapping.extract_indicator(event['Event']))
+            g.relationships.append(
+                mapping.extract_relationship(
+                    judgement['id'], indicator['id'],
+                    current_app.config['ELEMENT_OF_RELATION']
+                )
+            )
 
         if judgements_for_observable:
             g.judgements.extend(judgements_for_observable)

@@ -131,6 +131,8 @@ def jsonify_result():
         result['data']['sightings'] = format_docs(g.sightings)
     if g.get('indicators'):
         result['data']['indicators'] = format_docs(g.indicators)
+    if g.get('relationships'):
+        result['data']['relationships'] = format_docs(g.relationships)
 
     if g.get('errors'):
         result['errors'] = g.errors

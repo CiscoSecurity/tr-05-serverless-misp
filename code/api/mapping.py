@@ -13,6 +13,7 @@ VERDICT = 'verdict'
 JUDGEMENT = 'judgement'
 SIGHTING = 'sighting'
 INDICATOR = 'indicator'
+RELATIONSHIP = 'relationship'
 
 VERDICT_DEFAULTS = {
     'type': VERDICT
@@ -40,6 +41,11 @@ INDICATOR_DEFAULTS = {
     'type': INDICATOR,
     'confidence': 'High',
     'source': SOURCE
+}
+
+RELATIONSHIP_DEFAULTS = {
+    **CTIM_DEFAULTS,
+    'type': RELATIONSHIP
 }
 
 FILE_HASH_TYPES = ('md5', 'sha1', 'sha256')
@@ -140,4 +146,14 @@ class Mapping:
             'producer': event['Orgc']['name'],
             'title': event['info'],
             **INDICATOR_DEFAULTS
+        }
+
+    @staticmethod
+    def extract_relationship(source_ref, target_ref, relationship_type):
+        return {
+            'id': transient_id(RELATIONSHIP),
+            'source_ref': source_ref,
+            'relationship_type': relationship_type,
+            'target_ref': target_ref,
+            **RELATIONSHIP_DEFAULTS
         }
