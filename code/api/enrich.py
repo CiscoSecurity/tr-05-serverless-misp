@@ -3,7 +3,7 @@ from functools import partial
 from api.mapping import Mapping
 from api.schemas import ObservableSchema
 from api.utils import (
-    get_json, get_key, jsonify_data,
+    get_json, jsonify_data,
     jsonify_result, filter_observables, create_misp_instance
 )
 from flask import Blueprint, current_app, g
@@ -92,6 +92,33 @@ def observe_observables():
 
 @enrich_api.route('/refer/observables', methods=['POST'])
 def refer_observables():
-    _ = get_key()
-    _ = get_observables()
-    return jsonify_data([])
+    _ = create_misp_instance()
+    observables = filter_observables(get_observables())
+
+    url = current_app.config['MISP_REFER_URL']
+
+    relay_output = [
+        {
+            'id': (
+                    f'ref-misp-search-{observable["type"]}-'
+                    + observable["value"]
+            ),
+            'title': (
+                'Search events with this '
+                f'{current_app.config["SUPPORTED_TYPES"][observable["type"]]}'
+            ),
+            'description': (
+                'Lookup events with this '
+                f'{current_app.config["SUPPORTED_TYPES"][observable["type"]]} '
+                'on MISP'
+            ),
+            'url': url.format(
+                    host=current_app.config['HOST'],
+                    observable=observable['value']
+            ),
+            'categories': ['Search', 'MISP'],
+        }
+        for observable in observables
+    ]
+
+    return jsonify_data(relay_output)
