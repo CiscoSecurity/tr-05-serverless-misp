@@ -137,7 +137,13 @@ def misp_client():
                             'id': '132789',
                             'category': 'Payload delivery',
                             'value': '1.1.1.1'
-                        }]
+                        }],
+                        "Tag": [{
+                            "name": "test tag"
+                        }],
+                        "Orgc": {
+                            "name": "ORGNAME"
+                        }
                     }}
                 ]
             )
@@ -236,6 +242,49 @@ def success_observe_body():
                         ),
                         'timestamp': '2021-03-11T23:08:52Z',
                         'type': 'sighting'
+                    }
+                ]
+            },
+            'indicators': {
+                'count': 1,
+                'docs': [
+                    {
+                        'confidence': 'High',
+                        'id': 'transient:indicator-'
+                              '542e4c9c-cadc-4f8f-bb11-6d13950d210b',
+                        'valid_time': {
+                            'end_time': '2014-10-02T00:00:00Z',
+                            'start_time': '2014-10-02T00:00:00Z'
+                        },
+                        'producer': 'ORGNAME',
+                        'schema_version': '1.1.5',
+                        'short_description': 'Category: Payload delivery',
+                        'source': 'MISP',
+                        'source_uri': 'https://1.2.3.4/events/view/'
+                                      '542e4c9c-cadc-4f8f-bb11-6d13950d210b',
+                        'tags': ['test tag'],
+                        'timestamp': '2021-03-11T23:08:52Z',
+                        'title': 'Test Event With High Threat Level',
+                        'type': 'indicator'
+                    }
+                ]
+            },
+            'relationships': {
+                'count': 2,
+                'docs': [
+                    {
+                        'relationship_type': 'member-of',
+                        'schema_version': '1.1.5',
+                        'target_ref': 'transient:indicator-'
+                                      '542e4c9c-cadc-4f8f-bb11-6d13950d210b',
+                        'type': 'relationship'
+                    },
+                    {
+                        'relationship_type': 'element-of',
+                        'schema_version': '1.1.5',
+                        'target_ref': 'transient:indicator-'
+                                      '542e4c9c-cadc-4f8f-bb11-6d13950d210b',
+                        'type': 'relationship'
                     }
                 ]
             }

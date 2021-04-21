@@ -44,21 +44,42 @@ def observe_observables():
     g.verdicts = []
     g.judgements = []
     g.sightings = []
+    g.indicators = []
+    g.relationships = []
 
     for observable in observables:
         mapping = Mapping(observable)
 
-        events = misp.search(value=observable['value'], metadata=False)
+        events = misp.search(
+            value=observable['value'], metadata=False,
+            limit=current_app.config['CTR_ENTITIES_LIMIT']
+        )
         events.sort(key=lambda elem: elem['Event']['threat_level_id'])
-        events = events[:current_app.config['CTR_ENTITIES_LIMIT']]
 
         judgements_for_observable = []
 
         for event in events:
-            judgements_for_observable.append(
-                mapping.extract_judgement(event['Event'])
+            judgement = mapping.extract_judgement(event['Event'])
+            judgements_for_observable.append(judgement)
+
+            sighting = mapping.extract_sighting(event['Event'])
+            g.sightings.append(sighting)
+
+            indicator = mapping.extract_indicator(event['Event'])
+            g.indicators.append(indicator)
+
+            g.relationships.append(
+                mapping.extract_relationship(
+                    sighting['id'], indicator['id'],
+                    current_app.config['MEMBER_OF_RELATION']
+                )
             )
-            g.sightings.append(mapping.extract_sighting(event['Event']))
+            g.relationships.append(
+                mapping.extract_relationship(
+                    judgement['id'], indicator['id'],
+                    current_app.config['ELEMENT_OF_RELATION']
+                )
+            )
 
         if judgements_for_observable:
             g.judgements.extend(judgements_for_observable)

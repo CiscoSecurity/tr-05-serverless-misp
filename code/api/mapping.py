@@ -12,6 +12,8 @@ SOURCE = 'MISP'
 VERDICT = 'verdict'
 JUDGEMENT = 'judgement'
 SIGHTING = 'sighting'
+INDICATOR = 'indicator'
+RELATIONSHIP = 'relationship'
 
 VERDICT_DEFAULTS = {
     'type': VERDICT
@@ -32,6 +34,18 @@ SIGHTING_DEFAULTS = {
     'count': 1,
     'confidence': 'High',
     'source': SOURCE
+}
+
+INDICATOR_DEFAULTS = {
+    **CTIM_DEFAULTS,
+    'type': INDICATOR,
+    'confidence': 'High',
+    'source': SOURCE
+}
+
+RELATIONSHIP_DEFAULTS = {
+    **CTIM_DEFAULTS,
+    'type': RELATIONSHIP
 }
 
 FILE_HASH_TYPES = ('md5', 'sha1', 'sha256')
@@ -98,7 +112,7 @@ class Mapping:
 
     def _description(self, event):
         for attribute in event['Attribute']:
-            if attribute['value'] == self.observable['value']:
+            if self.observable['value'] in attribute['value']:
                 return f"Category: {attribute['category']}"
 
     def _observed_time(self, event):
@@ -119,4 +133,27 @@ class Mapping:
             'source_uri': self._source_uri(event),
             'timestamp': self._timestamp(event),
             **SIGHTING_DEFAULTS
+        }
+
+    def extract_indicator(self, event):
+        return {
+            'short_description': self._description(event),
+            'valid_time': self._observed_time(event),
+            'id': transient_id(INDICATOR, event['uuid']),
+            'source_uri': self._source_uri(event),
+            'timestamp': self._timestamp(event),
+            'tags': [tag['name'] for tag in event.get('Tag', [])],
+            'producer': event['Orgc']['name'],
+            'title': event['info'],
+            **INDICATOR_DEFAULTS
+        }
+
+    @staticmethod
+    def extract_relationship(source_ref, target_ref, relationship_type):
+        return {
+            'id': transient_id(RELATIONSHIP),
+            'source_ref': source_ref,
+            'relationship_type': relationship_type,
+            'target_ref': target_ref,
+            **RELATIONSHIP_DEFAULTS
         }

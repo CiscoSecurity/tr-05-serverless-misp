@@ -129,6 +129,10 @@ def jsonify_result():
         result['data']['judgements'] = format_docs(g.judgements)
     if g.get('sightings'):
         result['data']['sightings'] = format_docs(g.sightings)
+    if g.get('indicators'):
+        result['data']['indicators'] = format_docs(g.indicators)
+    if g.get('relationships'):
+        result['data']['relationships'] = format_docs(g.relationships)
 
     if g.get('errors'):
         result['errors'] = g.errors
@@ -138,7 +142,9 @@ def jsonify_result():
     return jsonify(result)
 
 
-def transient_id(entity_type):
+def transient_id(entity_type, uuid=None):
+    if uuid:
+        return f'transient:{entity_type}-{uuid}'
     return f'transient:{entity_type}-{uuid4()}'
 
 
