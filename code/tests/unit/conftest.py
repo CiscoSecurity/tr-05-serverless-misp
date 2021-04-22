@@ -314,13 +314,31 @@ def success_deliberate_body():
 
 
 @fixture(scope='module')
+def success_refer_body():
+    return {
+        'data': [
+            {
+                'categories': [
+                    'Search',
+                    'MISP'
+                ],
+                'description': 'Lookup events with this IP on MISP',
+                'id': 'ref-misp-search-ip-1.1.1.1',
+                'title': 'Search events with this IP',
+                'url': 'https://1.2.3.4/events/index/searchall:1.1.1.1'
+            }
+        ]
+    }
+
+
+@fixture(scope='module')
 def success_enrich_expected_payload(
         route, success_deliberate_body,
-        success_observe_body
+        success_observe_body, success_refer_body
 ):
     payload_to_route_match = {
         '/deliberate/observables': success_deliberate_body,
-        '/refer/observables': {'data': []},
+        '/refer/observables': success_refer_body,
         '/observe/observables': success_observe_body
     }
     return payload_to_route_match[route]

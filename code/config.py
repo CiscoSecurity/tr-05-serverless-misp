@@ -15,8 +15,17 @@ class Config:
 
     CTR_DEFAULT_ENTITIES_LIMIT = 100
 
-    SUPPORTED_TYPES = ('ip', 'domain', 'url', 'sha1', 'sha256', 'md5')
+    SUPPORTED_TYPES = {
+        'ip': 'IP',
+        'domain': 'domain',
+        'url': 'URL',
+        'sha1': 'SHA1',
+        'sha256': 'SHA256',
+        'md5': 'MD5'
+    }
 
     MEMBER_OF_RELATION = 'member-of'
 
     ELEMENT_OF_RELATION = 'element-of'
+
+    MISP_REFER_URL = '{host}/events/index/searchall:{observable}'
