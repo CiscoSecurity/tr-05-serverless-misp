@@ -1,4 +1,4 @@
-from urllib.error import URLError
+from urllib.error import URLError, HTTPError
 from uuid import uuid4
 
 import jwt
@@ -66,7 +66,9 @@ def get_key():
         DecodeError: WRONG_JWT_STRUCTURE,
         InvalidAudienceError: WRONG_AUDIENCE,
         PyJWKClientError: KID_NOT_FOUND,
-        URLError: WRONG_JWKS_HOST
+        URLError: WRONG_JWKS_HOST,
+        HTTPError: WRONG_JWKS_HOST,
+        ConnectionError: WRONG_JWKS_HOST
     }
 
     try:
