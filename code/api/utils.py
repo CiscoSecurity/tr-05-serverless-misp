@@ -9,7 +9,7 @@ from api.errors import (
 from flask import request, jsonify, current_app, g
 from jwt import (
     PyJWKClient, InvalidSignatureError, InvalidAudienceError,
-    DecodeError, PyJWKClientError
+    DecodeError, PyJWKClientError, MissingRequiredClaimError
 )
 from pymisp import PyMISP, exceptions
 
@@ -64,6 +64,7 @@ def get_key():
         InvalidSignatureError: WRONG_KEY,
         DecodeError: WRONG_JWT_STRUCTURE,
         InvalidAudienceError: WRONG_AUDIENCE,
+        MissingRequiredClaimError: WRONG_PAYLOAD_STRUCTURE,
         PyJWKClientError: KID_NOT_FOUND,
         URLError: WRONG_JWKS_HOST,
         HTTPError: WRONG_JWKS_HOST,
