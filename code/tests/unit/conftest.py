@@ -52,7 +52,7 @@ def invalid_json_expected_payload():
         return {
             'errors': [{
                 'code': INVALID_ARGUMENT,
-                'message': message,
+                'message': f'Invalid JSON payload received. {message}',
                 'type': 'fatal'
             }]
         }
