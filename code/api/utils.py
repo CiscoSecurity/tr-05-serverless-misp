@@ -13,7 +13,6 @@ from jwt import (
 )
 from pymisp import PyMISP, exceptions
 
-
 NO_AUTH_HEADER = 'Authorization header is missing'
 WRONG_AUTH_TYPE = 'Wrong authorization type'
 WRONG_PAYLOAD_STRUCTURE = 'Wrong JWT payload structure'
@@ -158,7 +157,9 @@ def filter_observables(observables):
     supported_types = current_app.config['SUPPORTED_TYPES']
     observables = remove_duplicates(observables)
     return list(
-        filter(lambda obs: obs['type'] in supported_types, observables)
+        filter(lambda obs: (
+                obs['type'] in supported_types and obs["value"] != "0"
+        ), observables)
     )
 
 
