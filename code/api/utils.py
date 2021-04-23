@@ -1,4 +1,4 @@
-from urllib.error import URLError
+from urllib.error import URLError, HTTPError
 from uuid import uuid4
 
 import jwt
@@ -9,10 +9,9 @@ from api.errors import (
 from flask import request, jsonify, current_app, g
 from jwt import (
     PyJWKClient, InvalidSignatureError, InvalidAudienceError,
-    DecodeError, PyJWKClientError
+    DecodeError, PyJWKClientError, MissingRequiredClaimError
 )
 from pymisp import PyMISP, exceptions
-
 
 NO_AUTH_HEADER = 'Authorization header is missing'
 WRONG_AUTH_TYPE = 'Wrong authorization type'
@@ -65,8 +64,11 @@ def get_key():
         InvalidSignatureError: WRONG_KEY,
         DecodeError: WRONG_JWT_STRUCTURE,
         InvalidAudienceError: WRONG_AUDIENCE,
+        MissingRequiredClaimError: WRONG_PAYLOAD_STRUCTURE,
         PyJWKClientError: KID_NOT_FOUND,
-        URLError: WRONG_JWKS_HOST
+        URLError: WRONG_JWKS_HOST,
+        HTTPError: WRONG_JWKS_HOST,
+        ConnectionError: WRONG_JWKS_HOST
     }
 
     try:
@@ -156,7 +158,9 @@ def filter_observables(observables):
     supported_types = current_app.config['SUPPORTED_TYPES']
     observables = remove_duplicates(observables)
     return list(
-        filter(lambda obs: obs['type'] in supported_types, observables)
+        filter(lambda obs: (
+                obs['type'] in supported_types and obs["value"] != "0"
+        ), observables)
     )
 
 

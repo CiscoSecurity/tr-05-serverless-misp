@@ -21,7 +21,8 @@ class Config:
         'url': 'URL',
         'sha1': 'SHA1',
         'sha256': 'SHA256',
-        'md5': 'MD5'
+        'md5': 'MD5',
+        'hostname': 'hostname'
     }
 
     MEMBER_OF_RELATION = 'member-of'

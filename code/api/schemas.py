@@ -2,7 +2,7 @@ from marshmallow import ValidationError, Schema, fields, INCLUDE
 
 
 def validate_string(value):
-    if value == '':
+    if value.strip() == '':
         raise ValidationError('Field may not be blank.')
 
 
