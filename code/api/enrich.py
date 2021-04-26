@@ -50,6 +50,11 @@ def observe_observables():
     for observable in observables:
         mapping = Mapping(observable)
 
+        # This check was added due to the fact that MISP
+        # returns all data in case of searching for spaces.
+        if not observable['value'].strip():
+            continue
+
         events = misp.search(
             value=observable['value'], metadata=False,
             limit=current_app.config['CTR_ENTITIES_LIMIT']
