@@ -115,6 +115,14 @@ curl http://localhost:9090
 Each response from the MISP API for the supported observables generates the following CTIM entities:
 
 - `Judgements` are based on `.threat_level_id` of each event in response.
+  
+  | CTIM Disposition Name |  MISP threat_level_id |
+  |-----------------------|-----------------------|
+  | Malicious             | 1 (High)              |
+  | Suspicious            | 2 (Medium)            |
+  | Common                | 3 (Low)               |
+  | Unknown               | 4 (Undefined)         |
+  
 - `Verdict` is chosen from all of the `Judgements` on that observable. The highest priority `Judgement` becomes the active `Verdict`.
 - `Indicators` and `Sightings` are taken from each event in response.
 - `Sightings` are based on `.date`.
