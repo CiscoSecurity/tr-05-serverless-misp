@@ -117,7 +117,7 @@ Each response from the MISP API for the supported observables generates the foll
 - `Judgements` are based on `.threat_level_id` of each event in response.
 - `Verdict` is chosen from all of the `Judgements` on that observable. The highest priority `Judgement` becomes the active `Verdict`.
 - `Indicators` and `Sightings` are taken from each event in response.
-- `Sightings` are based on `.date`
-- `Indicators` are based on `.info`
+- `Sightings` are based on `.date`.
+- `Indicators` are based on `.info`.
 - The `Sighting` to `Indicator` Relationship is `sighting-of`.
 - The `Judgement` to `Indicator` Relationship is `element-of`.
