@@ -1,0 +1,30 @@
+[
+  {
+    "type": "url",
+    "value": "https://portal.sbn.co.th/rss.php"
+  },
+  {
+    "type": "domain",
+    "value": "detail43.myfirewall.org"
+  },
+  {
+    "type": "ip",
+    "value": "193.227.29.227"
+  },
+  {
+    "type": "hostname",
+    "value": "digi.shanx.icu"
+  },
+  {
+    "type": "sha1",
+    "value": "42e6da9a08802b5ce5d1f754d4567665637b47bc"
+  },
+  {
+    "type": "sha256",
+    "value": "323d0cf9ac1c750761f66482154dbd3144dae7336c955a4576cb4cce6438a6ba"
+  },
+  {
+    "type": "md5",
+    "value": "8b83fc5d3a6a80281269f9e337fe3fff"
+  }
+]
