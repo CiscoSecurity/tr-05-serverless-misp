@@ -33,7 +33,7 @@
             "key": "custom_HOST",
             "required": true,
             "type": "string",
-            "label": "MISP host"
+            "label": "MISP Host"
         },
         {
             "key": "custom_CTR_ENTITIES_LIMIT",
