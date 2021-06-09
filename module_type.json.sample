@@ -27,7 +27,7 @@
             "key": "custom_AuthKey",
             "required": true,
             "type": "api_key",
-            "label": "Auth key"
+            "label": "Auth Key"
         },
         {
             "key": "custom_HOST",
