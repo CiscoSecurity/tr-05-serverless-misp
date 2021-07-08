@@ -1,8 +1,10 @@
-FROM alpine:3.13
+FROM alpine:3.14
 LABEL maintainer="Ian Redden <iaredden@cisco.com>"
 
 # install packages we need
-RUN apk update && apk add --no-cache musl-dev openssl-dev gcc python3 py3-configobj python3-dev supervisor git libffi-dev uwsgi-python3 uwsgi-http jq nano syslog-ng uwsgi-syslog py3-pip
+RUN apk update && apk add --no-cache musl-dev openssl-dev gcc py3-configobj \
+supervisor git libffi-dev uwsgi-python3 uwsgi-http jq syslog-ng uwsgi-syslog \
+py3-pip python3-dev
 
 # do the Python dependencies
 ADD code /app
