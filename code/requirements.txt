@@ -1,9 +1,0 @@
-Flask==2.0.1
-marshmallow==3.12.1
-requests==2.25.1
-cryptography==3.3.2
-pyjwt[crypto]==2.1.0
-pymisp==2.4.141.1
-flake8==3.9.2
-coverage==5.5
-pytest==6.2.4
