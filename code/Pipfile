@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+cryptography = "==3.3.2"
+Flask = "==2.0.1"
+marshmallow = "==3.12.1"
+requests = "==2.25.1"
+PyJWT = "==2.1.0"
+pymisp = "==2.4.141.1"
+
+[dev-packages]
+flake8 = "==3.9.2"
+coverage = "==5.5"
+pytest = "==6.2.4"
+
+[requires]
+python_version = "3.9"
