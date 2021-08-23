@@ -1,14 +1,18 @@
 FROM alpine:3.14
 LABEL maintainer="Ian Redden <iaredden@cisco.com>"
 
+ENV PIP_IGNORE_INSTALLED 1
+
 # install packages we need
 RUN apk update && apk add --no-cache musl-dev openssl-dev gcc py3-configobj \
-supervisor git libffi-dev uwsgi-python3 uwsgi-http jq syslog-ng uwsgi-syslog \
+supervisor libffi-dev uwsgi-python3 uwsgi-http jq syslog-ng uwsgi-syslog \
 py3-pip python3-dev
 
 # do the Python dependencies
 ADD code /app
-RUN pip3 install -r /app/requirements.txt
+ADD code/Pipfile code/Pipfile.lock /
+RUN set -ex && pip install --no-cache-dir --upgrade pipenv && \
+    pipenv install --system
 RUN chown -R uwsgi.uwsgi /etc/uwsgi
 
 # copy over scripts to init
