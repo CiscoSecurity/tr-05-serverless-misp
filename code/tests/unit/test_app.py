@@ -18,11 +18,6 @@ def calls():
     yield Call('GET', '/deliberate/observables', HTTPStatus.METHOD_NOT_ALLOWED)
     yield Call('GET', '/observe/observables', HTTPStatus.METHOD_NOT_ALLOWED)
     yield Call('GET', '/refer/observables', HTTPStatus.METHOD_NOT_ALLOWED)
-    yield Call('GET', '/respond/observables', HTTPStatus.METHOD_NOT_ALLOWED)
-    yield Call('GET', '/respond/trigger', HTTPStatus.METHOD_NOT_ALLOWED)
-    yield Call('GET', '/tiles', HTTPStatus.METHOD_NOT_ALLOWED)
-    yield Call('GET', '/tiles/tile', HTTPStatus.METHOD_NOT_ALLOWED)
-    yield Call('GET', '/tiles/tile-data', HTTPStatus.METHOD_NOT_ALLOWED)
     yield Call('POST', '/watchdog', HTTPStatus.METHOD_NOT_ALLOWED)
 
 
