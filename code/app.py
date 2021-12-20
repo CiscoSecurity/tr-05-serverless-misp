@@ -1,3 +1,5 @@
+import traceback
+
 from flask import Flask, jsonify
 
 from api.enrich import enrich_api
@@ -20,7 +22,7 @@ app.register_blueprint(watchdog_api)
 
 @app.errorhandler(Exception)
 def handle_error(exception):
-    app.logger.error(exception)
+    app.logger.error(traceback.format_exc())
     code = getattr(exception, 'code', 500)
     message = getattr(exception, 'description', 'Something went wrong.')
     reason = '.'.join([
@@ -34,7 +36,7 @@ def handle_error(exception):
 
 @app.errorhandler(TRFormattedError)
 def handle_tr_formatted_error(exception):
-    app.logger.error(exception)
+    app.logger.error(traceback.format_exc())
     return jsonify_errors(exception.json)
 
 
