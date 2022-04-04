@@ -22,13 +22,15 @@ app.register_blueprint(watchdog_api)
 
 @app.errorhandler(Exception)
 def handle_error(exception):
-    app.logger.error(traceback.format_exc())
     code = getattr(exception, 'code', 500)
     message = getattr(exception, 'description', 'Something went wrong.')
     reason = '.'.join([
         exception.__class__.__module__,
         exception.__class__.__name__,
     ])
+
+    if code != 404:
+        app.logger.error(traceback.format_exc())
 
     response = jsonify(code=code, message=message, reason=reason)
     return response, code
