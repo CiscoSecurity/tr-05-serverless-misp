@@ -1,0 +1,3 @@
+[flake8]
+exclude = */payloads_for_tests.py
+max-line-length = 120
