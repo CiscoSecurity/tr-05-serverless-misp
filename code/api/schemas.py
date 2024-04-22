@@ -2,8 +2,8 @@ from marshmallow import ValidationError, Schema, fields, INCLUDE
 
 
 def validate_string(value):
-    if value == '':
-        raise ValidationError('Field may not be blank.')
+    if value == "":
+        raise ValidationError("Field may not be blank.")
 
 
 class ObservableSchema(Schema):
@@ -19,7 +19,7 @@ class ObservableSchema(Schema):
 
 class ActionFormParamsSchema(Schema):
     action_id = fields.String(
-        data_key='action-id',
+        data_key="action-id",
         validate=validate_string,
         required=True,
     )
