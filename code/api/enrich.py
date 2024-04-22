@@ -111,8 +111,8 @@ def refer_observables():
 
     relay_output = [
         {
-            "id": (f'ref-misp-search-{observable["type"]}-' + observable["value"]),
-            "title": f"Search events with this {current_app.config['SUPPORTED_TYPES'][observable['type']]}",
+            "id": f"ref-misp-search-{observable['type']}-{observable['value']}",
+            "title": f"Search events with this {supported_types[observable['type']]}",
             "description": f"Lookup events with this {supported_types[observable['type']]} on MISP",
             "url": url.format(host=current_app.config["HOST"], observable=observable["value"]),
             "categories": ["Search", "MISP"],
