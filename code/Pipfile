@@ -4,17 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-cryptography = "==3.3.2"
-Flask = "==2.0.1"
-marshmallow = "==3.12.1"
-requests = "==2.25.1"
-PyJWT = "==2.1.0"
-pymisp = "==2.4.141.1"
+cryptography = "==42.0.7"
+Flask = "==3.0.3"
+marshmallow = "==3.21.2"
+requests = "==2.32.3"
+PyJWT = "==2.6.0"
+pymisp = "==2.4.190"
 
 [dev-packages]
-flake8 = "==3.9.2"
-coverage = "==5.5"
-pytest = "==6.2.4"
+flake8 = "==7.0.0"
+coverage = "==7.5.3"
+pytest = "==8.2.1"
+pip-audit = "==2.7.3"
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"
