@@ -1,3 +1,3 @@
 @Library('softserve-jenkins-library@main') _
 
-startPipeline()
+startPipeline("", [3.11], 3.18)
