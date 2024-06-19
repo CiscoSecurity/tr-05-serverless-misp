@@ -8,6 +8,7 @@ cryptography = "==42.0.7"
 Flask = "==3.0.3"
 marshmallow = "==3.21.2"
 requests = "==2.32.3"
+urllib3 = "==2.2.2"
 PyJWT = "==2.6.0"
 pymisp = "==2.4.190"
 
