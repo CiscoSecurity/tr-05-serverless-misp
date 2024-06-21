@@ -5,7 +5,7 @@ from pytest import fixture
 from http import HTTPStatus
 from unittest.mock import MagicMock, patch
 from api.errors import INVALID_ARGUMENT
-from tests.unit.payloads_for_tests import PRIVATE_KEY
+from tests.unit.payloads_for_tests import PRIVATE_KEY, EVENTS
 
 
 @fixture(scope='session')
@@ -13,7 +13,8 @@ def client():
     app.rsa_private_key = PRIVATE_KEY
 
     app.testing = True
-
+    app.config['HOST'] = 'https://1.2.3.4'
+    app.config['CTR_ENTITIES_LIMIT'] = 100
     with app.test_client() as client:
         yield client
 
@@ -70,6 +71,12 @@ def mock_api_response(text='', status_code=HTTPStatus.OK, payload=None):
     mock_response.json = lambda: payload
 
     return mock_response
+
+
+def mock_events():
+    mock_events = MagicMock()
+    mock_events.search = MagicMock(return_value=EVENTS)
+    return mock_events
 
 
 @fixture(scope='function')

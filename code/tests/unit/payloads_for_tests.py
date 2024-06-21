@@ -36,3 +36,25 @@ CwIhAMriTUAovANKJkNWXwGW1frgM2i3Jlqag1YGOYelvyZbAiA4zmz9bV1aF+G7
 avIBIMivH8sYjh/BGbD46qJa9zeP6QIgGlUK1ITGubEVQgatyYW83bIBo3KKgglB
 2KjYzPm0Bnk=
 -----END PRIVATE KEY-----'''
+
+EVENTS = [
+    {"Event": {
+        "id": "1",
+        "date": "2014-10-02",
+        "threat_level_id": "1",
+        "info": "Test Event With High Threat Level",
+        "uuid": "542e4c9c-cadc-4f8f-bb11-6d13950d210b",
+        "timestamp": "1615504132",
+        "Attribute": [{
+            'id': '132789',
+            'category': 'Payload delivery',
+            'value': '1.1.1.1'
+        }],
+        "Tag": [{
+            "name": "test tag"
+        }],
+        "Orgc": {
+            "name": "ORGNAME"
+        }
+    }}
+]

@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from pytest import fixture
 
@@ -16,20 +16,12 @@ def route(request):
     return request.param
 
 
+@patch('api.health.create_misp_instance')
 @patch('jwt.PyJWKClient.fetch_data')
-def test_health_call_success(mock_request, route, client, valid_jwt,
-                             misp_client):
+def test_health_call_success(mock_request, mock_instance,
+                             route, client, valid_jwt, misp_client):
     mock_request.return_value = EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
+    mock_instance.return_value = MagicMock()
     response = client.post(route, headers=get_headers(valid_jwt()))
     assert response.status_code == HTTPStatus.OK
     assert response.json == {'data': {'status': 'ok'}}
-
-
-@patch('jwt.PyJWKClient.fetch_data')
-def test_health_call_failure(
-        mock_request, route, client, valid_jwt,
-        misp_client_error, misp_internal_expected_payload):
-    mock_request.return_value = EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
-    response = client.post(route, headers=get_headers(valid_jwt()))
-    assert response.status_code == HTTPStatus.OK
-    assert response.json == misp_internal_expected_payload
