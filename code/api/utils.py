@@ -174,4 +174,4 @@ def create_misp_instance():
             timeout=current_app.config['MISP_TIMEOUT_SEC']
         )
     except exceptions.PyMISPError as error:
-        raise CriticalMISPResponseError(error.message)
+        raise CriticalMISPResponseError(error.message) from error
