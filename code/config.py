@@ -5,7 +5,7 @@ class Config:
     settings = json.load(open('container_settings.json', 'r'))
     VERSION = settings['VERSION']
 
-    MISP_VERIFYCERT = False
+    MISP_VERIFYCERT = True
     MISP_TIMEOUT_SEC = 25
 
     SOURCE_URI = '{host}/events/view/{uuid}'
